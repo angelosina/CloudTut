@@ -1,0 +1,61 @@
+m1.xxlarge 16VCPU, 32GB RAM, 40GB disco
+
+cc@129.114.24.229
+
+#wget https://julialang-s3.julialang.org/bin/linux/x64/1.6/julia-1.6.7-linux-x86_64.tar.gz
+#tar xvfz julia-1.6.7-linux-x86_64.tar.gz
+
+
+wget https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.3-linux-x86_64.tar.gz
+tar xvfz julia-1.8.3-linux-x86_64.tar.gz
+
+cd julia-1.8.3/bin
+
+./julia
+using Pkg
+Pkg.add("Distributions")
+exit()
+
+*** Dal mio PC*****
+scp *.toml cc@129.114.24.229:.julia/environments/v1.8
+*******************
+
+./julia
+using Pkg
+Pkg.instantiate()
+exit()
+
+(CentOS) sudo yum -y install vim
+(ubuntu) sudo apt-get -y install vim
+
+---------------------------Generatore Tracce--------------
+scp model-software.zip  cc@129.114.24.229:~ //DAL MIO PC
+cd
+unzip model-software.zip
+cd model-software/
+sudo apt-get -y install libgsl-dev //SU CENTOS: sudo yum -y install gsl-devel
+make clean
+make //SU CENTOS: Cambiare nel makefile CFLAGS=-O3 -std=gnu99
+
+Aggiungere queste directory al path ($HOME/julia-1.8.3/bin/:$HOME/model-software in .profile (ubuntu) o in .bash_profile/.bashrc):
+
+PATH=$PATH:$HOME/julia-1.8.3/bin/:$HOME/model-software
+
+export PATH
+
+---- file delle tracce---
+mkdir Experiments
+
+copiare su Experiments i file traces_20_100.tar.bz2, Config_Data.yaml, Config_FogNodes.yaml, popularity.txt
+
+scp traces_20_100.tar.bz2 cc@192.5.87.18:~/Experiments/
+scp Config_*.yaml cc@192.5.87.18:~/Experiments/
+scp popularity.txt cc@192.5.87.18:~/Experiments/
+
+----- Last but not least -----
+pip3 install networkx
+
+Aggiungere in .bash_profile/.bashrc (SOLO SE C'e' UN LIMIT)
+ulimit -u 16384 (o 32768 sulla macchina da 4TB)
+
+
